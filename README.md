@@ -113,7 +113,7 @@ CH32V307VCT6_demo/
 
 ## 许可证
 
-本仓库基于 [MIT 许可证](LICENSE) 发布。
+本仓库基于 [GPLv3 许可证](LICENSE) 发布。
 
 ## 贡献
 
