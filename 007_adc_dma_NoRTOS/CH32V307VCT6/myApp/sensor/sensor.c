@@ -85,9 +85,9 @@ void trackless_ahrs_update(void)
         gyroscope = FusionOffsetUpdate(&offset, gyroscope);//对陀螺仪数据进行偏移补偿
         FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer,0.005f);//函数更新 AHRS，融合陀螺仪和加速度计的数据，更新设备的姿态四元数
         FusionEuler euler=FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs));//将四元数转换为欧拉角
-        smartcar_imu.rpy_deg[_ROL]=euler.angle.pitch    *0.9 / 0.75;//存储欧拉角结果 // 并且矫正
-        smartcar_imu.rpy_deg[_PIT]=euler.angle.roll     *0.9 / 0.75;
-        smartcar_imu.rpy_deg[_YAW]=euler.angle.yaw      *0.9 / 0.75;
+        smartcar_imu.rpy_deg[_ROL]=euler.angle.pitch    *EULER_OFFICIENT;//存储欧拉角结果 // 并且矫正
+        smartcar_imu.rpy_deg[_PIT]=euler.angle.roll     *EULER_OFFICIENT;
+        smartcar_imu.rpy_deg[_YAW]=euler.angle.yaw      *EULER_OFFICIENT;
     }
     smartcar_imu.rpy_gyro_dps[_PIT]=smartcar_imu.gyro_dps.x;//存储陀螺仪的原始数据
     smartcar_imu.rpy_gyro_dps[_ROL]=smartcar_imu.gyro_dps.y;

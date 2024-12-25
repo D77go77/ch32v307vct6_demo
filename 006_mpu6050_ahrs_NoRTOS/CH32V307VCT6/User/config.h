@@ -26,6 +26,8 @@
 #define GPIO_PORT_OLED_SDA   GPIOB
 #define GPIO_PIN_OLED_SDA    GPIO_Pin_11
 
+//mpu6050 correction coefficient
+#define EULER_OFFICIENT 1.24138
 
 void debug_usart1(void);
 

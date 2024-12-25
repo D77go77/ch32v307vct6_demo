@@ -32,6 +32,8 @@
 #define no_voltage_upper_default 3.3f  //电压上限
 #define no_voltage_lower_default 2.0f  //电压下限
 
+//mpu6050 correction coefficient
+#define EULER_OFFICIENT 1.24138
 
 void debug_usart1(void);
 
