@@ -63,6 +63,12 @@
   - 配置 ADC 和 DMA，确保高效数据传输。
   - 使用任务调度器处理采集数据。
   - 可通过串口输出采集到的数据。
+  - 
+### **8. 008_lcdsprintf_spi_hw_NoRTOS**
+- **功能**:
+  - lcd函数重构，使用sprintf字符串
+- **技术点**:
+  - 方便使用，行数显示。
 
 ---
 
@@ -78,6 +84,7 @@ CH32V307VCT6_demo/
 ├── 005_lcd_spi_hw_NoRTOS/           # LCD 硬件SPI 示例项目
 ├── 006_mpu6050_ahrs_NoRTOS/         # MPU6050 姿态解算示例项目
 ├── 007_adc_dma_NoRTOS/              # ADC + DMA 示例项目
+├── 008_lcdsprintf_spi_hw/           # lcd 显示函数更新示例项目
 ├── LICENSE                          # 开源许可
 └── README.md                        # 本说明文件
 ```
