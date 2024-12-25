@@ -1,4 +1,4 @@
-
+---
 # CH32V307VCT6 示例项目合集
 
 本仓库包含多个基于 CH32V307VCT6 微控制器的示例项目和演示代码。每个项目展示了不同的功能和硬件特性，旨在帮助开发者快速上手开发。
@@ -63,18 +63,19 @@
   - 配置 ADC 和 DMA，确保高效数据传输。
   - 使用任务调度器处理采集数据。
   - 可通过串口输出采集到的数据。
-  - 
+
 ### **8. 008_lcdsprintf_spi_hw_NoRTOS**
 - **功能**:
-  - lcd函数重构，使用sprintf字符串
+  - 使用 `sprintf` 优化 LCD 显示函数。
 - **技术点**:
-  - 方便使用，行数显示。
+  - 支持多行显示，简化字符串格式化显示逻辑。
+  - 改善 LCD 驱动性能。
 
 ---
 
 ## 项目目录结构
 
-```
+```plaintext
 CH32V307VCT6_demo/
 │
 ├── 001_led_NoRTOS/                  # LED 示例项目
@@ -84,7 +85,7 @@ CH32V307VCT6_demo/
 ├── 005_lcd_spi_hw_NoRTOS/           # LCD 硬件SPI 示例项目
 ├── 006_mpu6050_ahrs_NoRTOS/         # MPU6050 姿态解算示例项目
 ├── 007_adc_dma_NoRTOS/              # ADC + DMA 示例项目
-├── 008_lcdsprintf_spi_hw/           # lcd 显示函数更新示例项目
+├── 008_lcdsprintf_spi_hw/           # LCD 显示优化示例项目
 ├── LICENSE                          # 开源许可
 └── README.md                        # 本说明文件
 ```
@@ -115,6 +116,7 @@ CH32V307VCT6_demo/
 - **LCD 快速内容更新（005_lcd_spi_hw_NoRTOS）**
 - **MPU6050 数据读取与姿态解算（006_mpu6050_ahrs_NoRTOS）**
 - **ADC 数据采集（007_adc_dma_NoRTOS）**
+- **优化 LCD 显示功能（008_lcdsprintf_spi_hw_NoRTOS）**
 
 ---
 
@@ -122,11 +124,15 @@ CH32V307VCT6_demo/
 
 本仓库基于 [GPLv3 许可证](LICENSE) 发布。
 
+---
+
 ## 贡献
 
-欢迎 Fork 本仓库并提交 Pull Request，贡献新的示例代码或改进功能。
+欢迎 Fork 本仓库并提交 Pull Request，贡献新的示例代码或改进功能，包括但不限于：
+- 添加新的示例项目。
+- 改进文档说明。
+- 优化现有功能实现。
 
 ---
 
-本项目旨在为 CH32V307VCT6 的开发者提供基础示例，后续将扩展更多功能演示。
-```
+本项目旨在为 CH32V307VCT6 的开发者提供基础示例，后续将持续扩展更多功能演示。
