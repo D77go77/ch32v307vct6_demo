@@ -66,7 +66,7 @@ void imu_calibration_params_init(void)
 }
 /***************************************
 函数名:    void imu_calibration(vector3f *gyro,vector3f *accel)
-说明: 加速度计/陀螺仪标定
+说明: 加速度计/陀螺仪标定 初始化
 ***************************************/
 #define gyro_delta_dps  3.0f
 void imu_calibration(vector3f *gyro,vector3f *accel)
@@ -103,7 +103,7 @@ void imu_calibration(vector3f *gyro,vector3f *accel)
     last_gyro.y=gyro->y;
     last_gyro.z=gyro->z;
 
-    if(cnt>=400)//持续满足2s//5ms*400=2s
+    if(cnt>=500)//持续满足2.5s
     {
         smartcar_imu.gyro_offset.x =(gyro_sum.x/cnt);//得到陀螺仪标定偏移
         smartcar_imu.gyro_offset.y =(gyro_sum.y/cnt);
@@ -128,18 +128,8 @@ u8 MPU_Init(void)
 { 
 	u8 res;
 	IIC_Init(100000,0x02);//初始化IIC总线 SCL-PB10 SDA-PB11
-	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X80);	//复位MPU6050
+	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X81);	//复位MPU6050
 	Delay_Ms(200);
-	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X00);	//唤醒MPU6050 
-	MPU_Write_Byte(MPU_SAMPLE_RATE_REG, 0x07);
-	MPU_Write_Byte(MPU_CFG_REG,0x06);
-	MPU_Write_Byte(MPU_ACCEL_CFG_REG,0x01);
-	MPU_Write_Byte(MPU_GYRO_CFG_REG,0x018);
-
-	MPU_Write_Byte(MPU_INT_EN_REG,0X00);	//关闭所有中断
-	MPU_Write_Byte(MPU_USER_CTRL_REG,0X00);	//I2C主模式关闭
-	MPU_Write_Byte(MPU_FIFO_EN_REG,0X00);	//关闭FIFO
-	MPU_Write_Byte(MPU_INTBP_CFG_REG,0X80);	//INT引脚低电平有效
 	res=MPU_Read_Byte(MPU_DEVICE_ID_REG);
 	if(res==MPU_ADDR)//器件ID正确
 	{

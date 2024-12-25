@@ -12,13 +12,12 @@ lpf_buf gyro_filter_buf[3],accel_filter_buf[3]; //滤波缓冲区
 sensor smartcar_imu;                            //传感器数据和状态
 FusionAhrs ahrs;                                //姿态解算
 FusionOffset offset;                            //传感器的偏移量校准模块
-#define sampling_frequent 200
-
+#define sampling_frequent 200                   //采集频率
 
 /***************************************************
 函数名: void imu_data_sampling(void)
 说明: IMU数据采样/校准/滤波
-time:5ms
+time:5ms  200hz
 ****************************************************/
 void imu_data_sampling(void)
 {
@@ -46,7 +45,7 @@ void imu_data_sampling(void)
     smartcar_imu.accel_g.x=smartcar_imu.accel_scale.x*smartcar_imu.accel_g_raw.x-smartcar_imu.accel_offset.x;
     smartcar_imu.accel_g.y=smartcar_imu.accel_scale.y*smartcar_imu.accel_g_raw.y-smartcar_imu.accel_offset.y;
     smartcar_imu.accel_g.z=smartcar_imu.accel_scale.z*smartcar_imu.accel_g_raw.z-smartcar_imu.accel_offset.z;
-    //加速度计/陀螺仪校准检测
+    //加速度计/陀螺仪校准检测初始化
     imu_calibration(&smartcar_imu.gyro_dps_raw,&smartcar_imu.accel_g_raw);
 }
 /***************************************************
@@ -85,9 +84,9 @@ void trackless_ahrs_update(void)
         gyroscope = FusionOffsetUpdate(&offset, gyroscope);//对陀螺仪数据进行偏移补偿
         FusionAhrsUpdateNoMagnetometer(&ahrs, gyroscope, accelerometer,0.005f);//函数更新 AHRS，融合陀螺仪和加速度计的数据，更新设备的姿态四元数
         FusionEuler euler=FusionQuaternionToEuler(FusionAhrsGetQuaternion(&ahrs));//将四元数转换为欧拉角
-        smartcar_imu.rpy_deg[_ROL]=euler.angle.pitch;//存储欧拉角结果
-        smartcar_imu.rpy_deg[_PIT]=euler.angle.roll;
-        smartcar_imu.rpy_deg[_YAW]=euler.angle.yaw;
+        smartcar_imu.rpy_deg[_ROL]=euler.angle.pitch    *0.9 / 0.75;//存储欧拉角结果 // 并且矫正
+        smartcar_imu.rpy_deg[_PIT]=euler.angle.roll     *0.9 / 0.75;
+        smartcar_imu.rpy_deg[_YAW]=euler.angle.yaw      *0.9 / 0.75;
     }
     smartcar_imu.rpy_gyro_dps[_PIT]=smartcar_imu.gyro_dps.x;//存储陀螺仪的原始数据
     smartcar_imu.rpy_gyro_dps[_ROL]=smartcar_imu.gyro_dps.y;
@@ -124,8 +123,8 @@ void calculate_quaternion_init(vector3f a,vector3f m,float *q)
     my *=   norm;
     mz *=   norm;
 
-      rpy_obs_deg[0]=-57.3f*atan(ax*invSqrt(ay*ay+az*az)); //横滚角
-      rpy_obs_deg[1]= 57.3f*atan(ay*invSqrt(ax*ax+az*az)); //俯仰角
+    rpy_obs_deg[0]=-57.3f*atan(ax*invSqrt(ay*ay+az*az)); //横滚角
+    rpy_obs_deg[1]= 57.3f*atan(ay*invSqrt(ax*ax+az*az)); //俯仰角
     _sin_rpy[_PIT] =    sinf(rpy_obs_deg[1]*DEG2RAD);
     _cos_rpy[_PIT] =    cosf(rpy_obs_deg[1]*DEG2RAD);
     _sin_rpy[_ROL] =    sinf(rpy_obs_deg[0]*DEG2RAD);
@@ -138,7 +137,7 @@ void calculate_quaternion_init(vector3f a,vector3f m,float *q)
                     +my * _sin_rpy[_ROL] * _cos_rpy[_PIT]
                     +mz * _sin_rpy[_ROL] * _cos_rpy[_PIT];
   /***********反正切得到磁力计观测角度*********/
-  rpy_obs_deg[2] = atan2f(magn.x,magn.y)*57.296f;
+    rpy_obs_deg[2] = atan2f(magn.x,magn.y)*57.296f;
     if(rpy_obs_deg[2]<0) rpy_obs_deg[2] = rpy_obs_deg[2]+360;
     rpy_obs_deg[2] = constrain_float(rpy_obs_deg[2],0.0f,360);
     //
